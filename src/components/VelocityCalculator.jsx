@@ -2,10 +2,10 @@ import { useState } from "react";
 
 const velocityData = {
     "1550_23_15_140": { V1: 129, Vr: 129, V2: 145 },
-    "1900_50_5_190": { V1: 142, Vr: 142, V2: 158 },
-    "4150_68_25_180": { V1: 132, Vr: 134, V2: 144 },
-    "3150_23_15_160": { V1: 124, Vr: 124, V2: 138 },
-    "2550_5_5_120": { V1: 122, Vr: 122, V2: 137 },
+    "1900_50_5_190": { V1: 155, Vr: 155, V2: 167 },
+    "4150_68_25_180": { V1: 134, Vr: 134, V2: 145 },
+    "3150_23_15_160": { V1: 132, Vr: 132, V2: 146 },
+    "2550_5_5_120": { V1: 119, Vr: 119, V2: 135 },
 };
 
 
@@ -56,7 +56,7 @@ export const VelocityCalculator = () => {
 
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md space-y-4">
                 <div>
-                    <label className="block font-medium">Elevación del aeropuerto (ft):</label>
+                    <label className="block font-medium">Altidud de presión:</label>
                     <input
                         type="number"
                         value={elevation}
@@ -112,6 +112,8 @@ export const VelocityCalculator = () => {
                         <option value="170">170</option>
                         <option value="180">180</option>
                         <option value="190">190</option>
+                        <option value="190">200</option>
+                        <option value="190">210</option>
                     </select>
                 </div>
 
