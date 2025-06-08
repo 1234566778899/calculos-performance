@@ -1,7 +1,7 @@
 /******************************************************************
  *   B-727 · Peso y Balance  — columnas:  Peso | Momento (/1000)
  ******************************************************************/
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /* — Pesos/momentos básicos de la aeronave — */
 const BOW_LB = 105_500;   // Basic Operating Weight
@@ -12,6 +12,56 @@ const useRow = () => {
     const [w, setW] = useState(0);    // weight  (lb)
     const [m, setM] = useState(0);    // moment (/1000 lb-in)
     return { w, m, setW, setM };
+};
+const arms = {
+    '8500': 992.1,
+    '9000': 993.0,
+    '9500': 993.9,
+    '10000': 994.7,
+    '10500': 995.4,
+    '11000': 996.1,
+    '11500': 996.8,
+    '12000': 997.5
+}
+
+const arms2 = {
+    '8500': 917.5,
+    '9000': 917.2,
+    '9500': 917.0,
+    '10000': 916.8,
+    '10500': 916.6,
+    '11000': 916.5,
+    '11500': 916.3,
+    '12000': 916.1,
+
+    '18500': 915.1,
+    '19000': 915.0,
+    '19500': 914.9,
+    '20000': 914.9,
+    '20500': 914.8,
+    '21000': 914.7,
+    '21500': 914.6,
+    '22000': 914.6,
+
+    '22500': 914.5,
+    '23000': 914.5,
+    '23500': 914.4,
+    '24000': 914.3,
+    '24500': 914.3,
+    '24250': 914.3,
+    '25000': 914.2,
+    '25200': 914.2,
+    '25500': 914.2,
+    '26000': 914.1,
+    '26200': 914.1,
+    '26500': 914.1,
+    '27000': 914.0,
+    '27500': 913.9,
+    '28000': 913.9,
+    '28500': 913.8,
+    '29000': 913.7,
+    '29500': 913.7,
+    '30000': 913.6
 };
 
 export default function WB727Sheet() {
@@ -28,6 +78,42 @@ export default function WB727Sheet() {
     const [totM1, setTotM] = useState(null);   // momento /1000
     const [cg, setCg] = useState(null);
 
+    useEffect(() => {
+        const { setM } = paxFw;
+        if (paxFw.w !== 0) {
+            setM(paxFw.w * 582 / 1000);   // 10 in de distancia entre filas (pax)
+        }
+    }, [paxFw])
+    useEffect(() => {
+        const { setM } = paxAf;
+        if (paxAf.w !== 0) {
+            setM(paxAf.w * 1028 / 1000);
+        }
+    }, [paxAf])
+    useEffect(() => {
+        const { setM } = cargFw;
+        if (cargFw.w !== 0) {
+            setM(cargFw.w * 680 / 1000);
+        }
+    }, [cargFw])
+    useEffect(() => {
+        const { setM } = cargAf;
+        if (cargAf.w !== 0) {
+            setM(cargAf.w * 1166 / 1000);
+        }
+    }, [cargAf])
+    useEffect(() => {
+        const { setM } = fuel13;
+        if (fuel13.w !== 0 && arms[fuel13.w]) {
+            setM(Math.round(fuel13.w * arms[fuel13.w] / 1000));
+        }
+    }, [fuel13])
+    useEffect(() => {
+        const { setM } = fuel2;
+        if (fuel2.w !== 0 && arms2[fuel2.w]) {
+            setM(fuel2.w * arms2[fuel2.w] / 1000);
+        }
+    }, [fuel2])
     /* 3. Cálculo */
     const calc = () => {
         /* ojo: tanks 1 & 3 son dos ⇒ peso y momento se multiplican ×2 */
@@ -37,12 +123,26 @@ export default function WB727Sheet() {
             cargFw.w + cargAf.w +
             (fuel13.w * 2) + fuel2.w;
 
+        console.log({
+            BOW_LB,
+            paxFw,
+            paxAf,
+            cargFw,
+            cargAf,
+            fuel13,
+            fuel2
+        })
         const moment =
             BOI_1000 +
             paxFw.m + paxAf.m +
             cargFw.m + cargAf.m +
             (fuel13.m * 2) + fuel2.m;
 
+        console.log({
+            weight,
+            moment,
+            cg: moment / weight
+        })
         const cgIn = +((moment / weight) * 1000).toFixed(1);
 
         setTotW(weight);
