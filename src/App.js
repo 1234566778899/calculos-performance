@@ -11,6 +11,7 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={<Home />} >
+          <Route exact path='/' element={< VelocityCalculator />} />
           <Route exact path='/a' element={< VelocityCalculator />} />
           <Route exact path='/b' element={< EPRCalculator />} />
           <Route exact path='/c' element={<WeightBalanceCalculator />} />
